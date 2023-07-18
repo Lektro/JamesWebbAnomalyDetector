@@ -23,8 +23,8 @@ public class AnomalyDetectionHotPixels {
         // Replace this value with an appropriate threshold
         double hotPixelThreshold = 550.0;
 
-        int hotPixelMarkerSize = 15; // Adjust the marker size as needed
-        // String outputFilePath = "C:/Temp/HotpixelsDetected_image.jpg"; // Output file path for the marked image
+        // Adjust the marker size as needed
+        int hotPixelMarkerSize = 15;
 
         try {
             // Step 1: Read FITS image data
