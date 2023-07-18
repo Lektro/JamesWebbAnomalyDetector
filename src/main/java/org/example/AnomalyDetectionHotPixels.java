@@ -18,7 +18,7 @@ public class AnomalyDetectionHotPixels {
 
     public static void main(String[] args) {
         // Replace "path/to/your/image.fits" with the actual file path of the FITS image
-        String fitsFilePath = "C:/Temp/jw02107028001_04101_00003_nrcb4_i2d.fits";
+        String fitsFilePath = "C:/Temp/jw02107028001_02101_00001_nrcb4_cal.fits";
         double hotPixelThreshold = 550.0; // Replace this value with an appropriate threshold
 
         int hotPixelMarkerSize = 15; // Adjust the marker size as needed
@@ -78,6 +78,16 @@ public class AnomalyDetectionHotPixels {
                 }
             }
 
+            // Enhance the image (choose the desired enhancement method)
+            double[][] enhancedImage = ImageEnhancer.contrastStretch(data); // or ImageEnhancer.histogramEqualization(data);
+
+            // Subtract background from the enhanced image
+            double[][] backgroundSubtractedImage = BackgroundSubtractor.subtractBackground(enhancedImage);
+
+            // Calibrate the background-subtracted image
+            double[][] calibratedImage = ImageCalibrator.calibrateImage(backgroundSubtractedImage);
+
+
             // Output detected hot pixels to console
             System.out.println("Number of hot pixels detected: " + hotPixels.size());
             for (HotPixel hotPixel : hotPixels) {
@@ -92,6 +102,8 @@ public class AnomalyDetectionHotPixels {
 
                 // Save the original image as JPEG
                 saveFitsImageAsJpeg(data, imageWidth, imageHeight, "C:/Temp/original_image.jpg");
+
+
             } else {
                 System.out.println("No hot pixels detected in the image.");
             }
