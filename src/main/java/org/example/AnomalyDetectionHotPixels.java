@@ -19,7 +19,9 @@ public class AnomalyDetectionHotPixels {
     public static void main(String[] args) {
         // Replace "path/to/your/image.fits" with the actual file path of the FITS image
         String fitsFilePath = "C:/Temp/jw02107028001_02101_00001_nrcb4_cal.fits";
-        double hotPixelThreshold = 550.0; // Replace this value with an appropriate threshold
+
+        // Replace this value with an appropriate threshold
+        double hotPixelThreshold = 550.0;
 
         int hotPixelMarkerSize = 15; // Adjust the marker size as needed
         // String outputFilePath = "C:/Temp/HotpixelsDetected_image.jpg"; // Output file path for the marked image
