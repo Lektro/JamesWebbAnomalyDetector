@@ -139,7 +139,7 @@ public class AnomalyDetectionHotPixels {
         }
     }
 
-    // Utility method to convert FITS data to double[][]
+    // Utility method to convert FITS data to double[][] so we can find the pixel locations
     private static double[][] convertToDoubleArray(Object dataObject) {
         if (dataObject instanceof double[][]) {
             return (double[][]) dataObject;
