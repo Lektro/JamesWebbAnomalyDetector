@@ -18,7 +18,7 @@ public class AnomalyDetectionHotPixels {
 
     public static void main(String[] args) {
         // Replace "path/to/your/image.fits" with the actual file path of the FITS image
-        String fitsFilePath = "C:/Temp/jw02107028001_02101_00001_nrcb4_cal.fits";
+        String fitsFilePath = "C:/Temp/jw02733-o001_t001_nircam_clear-f090w_i2d.fits";
 
         // Replace this value with an appropriate threshold
         double hotPixelThreshold = 550.0;
@@ -119,25 +119,31 @@ public class AnomalyDetectionHotPixels {
 
     // Utility method to get the pixel value from the image data
     private static double getPixelValue(Object data, int x, int y) {
+        double pixelValue = 0.0;
+
         if (data instanceof double[][]) {
             double[][] doubleData = (double[][]) data;
-            return doubleData[y][x];
+            if (y >= 0 && y < doubleData.length && x >= 0 && x < doubleData[y].length) {
+                pixelValue = doubleData[y][x];
+            }
         } else if (data instanceof float[][]) {
             float[][] floatData = (float[][]) data;
-            return floatData[y][x];
+            if (y >= 0 && y < floatData.length && x >= 0 && x < floatData[y].length) {
+                pixelValue = floatData[y][x];
+            }
         } else if (data instanceof int[][]) {
             int[][] intData = (int[][]) data;
-            return intData[y][x];
-        } else if (data instanceof short[][]) {
-            short[][] shortData = (short[][]) data;
-            return shortData[y][x];
-        } else if (data instanceof byte[][]) {
-            byte[][] byteData = (byte[][]) data;
-            return byteData[y][x];
+            if (y >= 0 && y < intData.length && x >= 0 && x < intData[y].length) {
+                pixelValue = intData[y][x];
+            }
         } else {
-            throw new IllegalArgumentException("Unsupported data type: " + data.getClass().getName());
+            // Handle other data types if necessary
+            System.err.println("Error: Unsupported data type.");
         }
+
+        return pixelValue;
     }
+
 
     // Utility method to convert FITS data to double[][] so we can find the pixel locations
     private static double[][] convertToDoubleArray(Object dataObject) {

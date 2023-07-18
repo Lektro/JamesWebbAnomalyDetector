@@ -4,10 +4,17 @@ public class HotPixelDetector {
 
     // Utility methods
     static double getPixelValue(Object data, int x, int y) {
-        // Assuming data is a 2D array of double values
-        return ((double[][]) data)[y][x];
-    }
+        if (data instanceof double[][]) {
+            double[][] doubleData = (double[][]) data;
+            if (y >= 0 && y < doubleData.length && x >= 0 && x < doubleData[y].length) {
+                return doubleData[y][x];
+            }
+        }
 
+        // Handle other data types or out-of-bounds cases if necessary
+        System.err.println("Error: Invalid coordinates or unsupported data type.");
+        return 0.0;
+    }
     static double getMaxPixelValue(Object data) {
         double max = Double.MIN_VALUE;
         double[][] dataArray = (double[][]) data;
