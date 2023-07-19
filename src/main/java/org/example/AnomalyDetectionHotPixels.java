@@ -18,7 +18,7 @@ public class AnomalyDetectionHotPixels {
 
     public static void main(String[] args) {
         // Replace "path/to/your/image.fits" with the actual file path of the FITS image
-        String fitsFilePath = "C:/Temp/jw02733-o001_t001_nircam_clear-f090w_i2d.fits";
+        String fitsFilePath = "C:/Temp/jw04499-o080_t002_miri_f770w_i2d.fits";
 
         // Replace this value with an appropriate threshold
         double hotPixelThreshold = 550.0;
@@ -29,6 +29,10 @@ public class AnomalyDetectionHotPixels {
         try {
             // Step 1: Read FITS image data
             Fits fits = new Fits(fitsFilePath);
+            FitsDataReader fitsDataReader = new FitsDataReader(fitsFilePath);
+
+
+
 
             // Debug information: Print the number of HDUs in the FITS file
             int numHDUs = fits.getNumberOfHDUs();
@@ -58,7 +62,15 @@ public class AnomalyDetectionHotPixels {
 
             ImageHDU imageHDU = (ImageHDU) hdu;
             Object dataObject = imageHDU.getData().getData();
+
             double[][] data = convertToDoubleArray(dataObject);
+
+            // Get the image data as a 2D array
+            //double[][] data = (double[][]) imageHDU.getData().getData();
+
+            // Verify the dimensions of the image data
+            //int imageWidth = data[0].length;
+            //int imageHeight = data[0].length;
 
             // Ensure data is not null before proceeding
             if (data == null) {
@@ -71,10 +83,11 @@ public class AnomalyDetectionHotPixels {
 
             int imageWidth = imageHDU.getAxes()[1];
             int imageHeight = imageHDU.getAxes()[1];
+
             for (int y = 0; y < imageHeight; y++) {
                 for (int x = 0; x < imageWidth; x++) {
                     double pixelValue = getPixelValue(data, x, y);
-                    if (pixelValue > hotPixelThreshold) {
+                    if (pixelValue >= hotPixelThreshold) {
                         hotPixels.add(new HotPixel(x, y, pixelValue));
                     }
                 }
@@ -100,11 +113,15 @@ public class AnomalyDetectionHotPixels {
             // Step 3: Process hot pixels and save the marked image
             if (!hotPixels.isEmpty()) {
                 FitsImage fitsImage = new FitsImage(data, imageWidth, imageHeight, hotPixels);
+
+
                 HotPixelMarker.markHotPixelsAndSave(fitsImage, 15, "C:/Temp/marked_image.jpg");
 
                 // Save the original image as JPEG
                 saveFitsImageAsJpeg(data, imageWidth, imageHeight, "C:/Temp/original_image.jpg");
 
+                // Save the enhanced image as JPEG
+                saveFitsImageAsJpeg(data, imageWidth, imageHeight, "C:/Temp/enhanced_image.jpg");
 
             } else {
                 System.out.println("No hot pixels detected in the image.");
@@ -119,29 +136,23 @@ public class AnomalyDetectionHotPixels {
 
     // Utility method to get the pixel value from the image data
     private static double getPixelValue(Object data, int x, int y) {
-        double pixelValue = 0.0;
-
         if (data instanceof double[][]) {
             double[][] doubleData = (double[][]) data;
-            if (y >= 0 && y < doubleData.length && x >= 0 && x < doubleData[y].length) {
-                pixelValue = doubleData[y][x];
+            if (y >= 0 && y < doubleData.length && x >= 0 && x < doubleData[0].length) {
+                return doubleData[y][x];
             }
         } else if (data instanceof float[][]) {
             float[][] floatData = (float[][]) data;
-            if (y >= 0 && y < floatData.length && x >= 0 && x < floatData[y].length) {
-                pixelValue = floatData[y][x];
+            if (y >= 0 && y < floatData.length && x >= 0 && x < floatData[0].length) {
+                return floatData[y][x];
             }
         } else if (data instanceof int[][]) {
             int[][] intData = (int[][]) data;
-            if (y >= 0 && y < intData.length && x >= 0 && x < intData[y].length) {
-                pixelValue = intData[y][x];
+            if (y >= 0 && y < intData.length && x >= 0 && x < intData[0].length) {
+                return intData[y][x];
             }
-        } else {
-            // Handle other data types if necessary
-            System.err.println("Error: Unsupported data type.");
         }
-
-        return pixelValue;
+        return 0.0; // Default value for invalid coordinates
     }
 
 
@@ -170,8 +181,11 @@ public class AnomalyDetectionHotPixels {
         double minValue = getMinPixelValue(data);
         double maxValue = getMaxPixelValue(data);
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        int dataHeight = data.length; // Assuming 'data' is a 2D array
+        int dataWidth = data[0].length; // Assuming all rows have the same width
+
+        for (int y = 0; y < height && y < dataHeight; y++) {
+            for (int x = 0; x < width && x < dataWidth; x++) {
                 double pixelValue = data[y][x];
                 int rgbValue = scalePixelValueToRGB(pixelValue, minValue, maxValue);
                 image.setRGB(x, y, rgbValue);
@@ -182,7 +196,7 @@ public class AnomalyDetectionHotPixels {
             String imageFormat = "JPEG"; // You can change the format to PNG, BMP, etc.
             java.io.File outputFile = new java.io.File(outputFilePath);
             javax.imageio.ImageIO.write(image, imageFormat, outputFile);
-            System.out.println("Original image saved as '" + outputFilePath + "'.");
+            System.out.println("Image saved as '" + outputFilePath + "'.");
         } catch (IOException e) {
             e.printStackTrace();
         }
