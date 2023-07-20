@@ -3,7 +3,7 @@ package org.example;
 public class HotPixelDetector {
 
     // Utility methods
-    static double getPixelValue(Object data, int x, int y) {
+    public double getPixelValue(Object data, int x, int y) throws PixelValueException {
         if (data instanceof double[][]) {
             double[][] doubleData = (double[][]) data;
             if (y >= 0 && y < doubleData.length && x >= 0 && x < doubleData[y].length) {
@@ -21,12 +21,11 @@ public class HotPixelDetector {
             }
         }
 
-        // Handle other data types or out-of-bounds cases if necessary
-        System.err.println("Error: Invalid coordinates or unsupported data type.");
-        return 0.0; // default return on error?
-
-
+        throw new PixelValueException("Error: Invalid coordinates or unsupported data type.");
     }
+
+
+
     static double getMaxPixelValue(Object data) {
         double max = Double.MIN_VALUE;
         double[][] dataArray = (double[][]) data;
@@ -40,16 +39,29 @@ public class HotPixelDetector {
         return max;
     }
 
-    static double getMinPixelValue(Object data) {
-        double min = Double.MAX_VALUE;
-        double[][] dataArray = (double[][]) data;
-        for (double[] row : dataArray) {
-            for (double value : row) {
-                if (value < min) {
-                    min = value;
+    public static double getMinPixelValue(double[][] data) {
+        double minValue = Double.MAX_VALUE;
+        for (int y = 0; y < data.length; y++) {
+            for (int x = 0; x < data[y].length; x++) {
+                double pixelValue = getPixelValue(data, x, y);
+                if (pixelValue < minValue) {
+                    minValue = pixelValue;
                 }
             }
         }
-        return min;
+        return minValue;
+    }
+
+    static double getPixelValue(double[][] data, int x, int y) {
+        if (y >= 0 && y < data.length && x >= 0 && x < data[y].length) {
+            return data[y][x];
+        }
+        // Default value for out-of-bounds cases
+        return 0.0;
+    }
+    public class PixelValueException extends Exception {
+        public PixelValueException(String message) {
+            super(message);
+        }
     }
 }

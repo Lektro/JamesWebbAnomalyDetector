@@ -1,3 +1,4 @@
+/*
 package org.example;
 
 import javax.imageio.ImageIO;
@@ -26,3 +27,4 @@ public class ImageUtils {
         ImageIO.write(bufferedImage, "JPEG", outputImageFile);
     }
 }
+*/

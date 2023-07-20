@@ -1,3 +1,4 @@
+/*
 package org.example;
 
 import nom.tam.fits.*;
@@ -50,3 +51,4 @@ public class FitsDataReader {
         }
     }
 }
+*/

@@ -29,7 +29,7 @@ public class AnomalyDetectionHotPixels {
         try {
             // Step 1: Read FITS image data
             Fits fits = new Fits(fitsFilePath);
-            FitsDataReader fitsDataReader = new FitsDataReader(fitsFilePath);
+            //FitsDataReader fitsDataReader = new FitsDataReader(fitsFilePath);
 
 
 
