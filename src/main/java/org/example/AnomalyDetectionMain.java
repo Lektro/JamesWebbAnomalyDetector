@@ -5,11 +5,12 @@ import java.io.File;
 public class AnomalyDetectionMain {
 
     public static void main(String[] args) {
+
         // Adjust these value's to your liking
-        double hotPixelThreshold = 420.0;
+        double hotPixelThreshold = 520.0;
         int hotPixelMarkerSize = 15;
 
-        // Def folder paths
+        // Define folder paths
         String folderPath = "C:/Temp/DataInput";
         String outputFolder = "C:/Temp/DataOutput";
         File folder = new File(folderPath);
@@ -20,7 +21,7 @@ public class AnomalyDetectionMain {
             outputDir.mkdir();
         }
 
-        // convert filenames to lower case
+        // Convert filenames to lower case
         File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".fits"));
 
         // check if there fit files in the folder or not

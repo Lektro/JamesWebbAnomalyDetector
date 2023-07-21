@@ -105,7 +105,7 @@ public class AnomalyDetectionProcessor {
         // Apply sharpening to enhance the image
         enhancedData = ImageEnhancer.sharpen(enhancedData);
 
-        // Apply denoising to enhance the image
+        // Apply de-noising to enhance the image
         enhancedData = ImageEnhancer.denoise(enhancedData);
 
 
@@ -193,6 +193,7 @@ public class AnomalyDetectionProcessor {
      *         Returns null if the input dataObject is of an unsupported type.
      */
     private static double[][] convertToDoubleArray(Object dataObject) {
+
         // Check if the dataObject is of type double[][] (already a double array)
         if (dataObject instanceof double[][]) {
             return (double[][]) dataObject;
@@ -229,6 +230,7 @@ public class AnomalyDetectionProcessor {
      * @param outputFilePath The file path where the JPEG image will be saved.
      */
     private static void saveFitsImageAsJpeg(double[][] data, int width, int height, String outputFilePath) {
+
         // Create a new BufferedImage with the specified width and height
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -237,7 +239,6 @@ public class AnomalyDetectionProcessor {
         double maxValue = getMaxPixelValue(data);
 
         // Define the color scale for mapping pixel values to RGB colors
-        // For example, you can use a gradient from blue to red
         Color[] colorScale = createNaturalColorScale();
 
         // Get the height and width of the 2D data array
@@ -289,7 +290,9 @@ public class AnomalyDetectionProcessor {
             int value = i;
             int r = value;
             int g = value;
-            int b = Math.min(value + 30, 255); // Add a slight blue tint to the grayscale
+
+            // Add a slight blue tint to the grayscale
+            int b = Math.min(value + 30, 255);
 
             colorScale[i] = new Color(r, g, b);
         }

@@ -38,10 +38,9 @@ public class ImageEnhancer {
         return enhancedData;
     }
 
-
-    // Add other image enhancement methods as needed
     // Sharpening method using a simple Laplacian kernel
     public static double[][] sharpen(double[][] data) {
+
         // Check if the image data is valid (not null and has non-zero dimensions)
         if (data == null || data.length == 0 || data[0].length == 0) {
             System.err.println("Error: Invalid image data for sharpening.");
@@ -82,7 +81,7 @@ public class ImageEnhancer {
     }
 
 
-    // Denoising using median filtering
+    // De-noising using median filtering
     public static double[][] denoise(double[][] data) {
         if (data == null || data.length == 0 || data[0].length == 0) {
             System.err.println("Error: Invalid image data for denoising.");
@@ -103,7 +102,9 @@ public class ImageEnhancer {
                     }
                 }
                 neighborValues.sort(Double::compareTo);
-                denoisedData[y][x] = neighborValues.get(4); // Use the median value as the denoised pixel value
+
+                // Use the median value as the de-noised pixel value
+                denoisedData[y][x] = neighborValues.get(4); // Use the median value as the de-noised pixel value
             }
         }
 

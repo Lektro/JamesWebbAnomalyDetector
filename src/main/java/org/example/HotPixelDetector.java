@@ -5,6 +5,7 @@ public class HotPixelDetector {
     // Method to find the maximum pixel value in the 2D data array
     static double getMaxPixelValue(Object data) {
         if (data == null || !(data instanceof double[][])) {
+
             // Handle the case when data is null or not a valid 2D array
             return Double.NaN; // Return a special value to indicate invalid data
         }
@@ -25,6 +26,7 @@ public class HotPixelDetector {
     // Method to find the minimum pixel value in the 2D data array
     public static double getMinPixelValue(double[][] data) {
         if (data == null || data.length == 0 || data[0] == null || data[0].length == 0) {
+
             // Handle the case when data is null or empty
             return Double.NaN; // Return a special value to indicate invalid data
         }
