@@ -49,137 +49,137 @@ public class AnomalyDetectionProcessor {
                 BasicHDU<?> hdu = fits.getHDU(i);
                 System.out.println("HDU " + i + " type: " + hdu.getClass().getSimpleName());
 
-            // If the HDU is an ImageHDU, print its image axes
-            if (hdu instanceof ImageHDU) {
-                ImageHDU imageHDU = (ImageHDU) hdu;
-                System.out.println("Image axes: " + imageHDU.getAxes()[0] + " x " + imageHDU.getAxes()[1]);
+                // If the HDU is an ImageHDU, print its image axes
+                if (hdu instanceof ImageHDU) {
+                    ImageHDU imageHDU = (ImageHDU) hdu;
+                    System.out.println("Image axes: " + imageHDU.getAxes()[0] + " x " + imageHDU.getAxes()[1]);
+                }
             }
-        }
 
-        // Get the primary HDU, which is typically the second HDU in the FITS file (index 1)
-        BasicHDU<?> hdu = fits.getHDU(1);
+            // Get the primary HDU, which is typically the second HDU in the FITS file (index 1)
+            BasicHDU<?> hdu = fits.getHDU(1);
 
-        // Check if the primary HDU is null or not an ImageHDU
-        if (hdu == null) {
-            System.err.println("Error: FITS imageHDU is null or empty.");
-            return;
-        }
+            // Check if the primary HDU is null or not an ImageHDU
+            if (hdu == null) {
+                System.err.println("Error: FITS imageHDU is null or empty.");
+                return;
+            }
 
             // Check if the primary HDU is not an ImageHDU, and handle the error
             if (!(hdu instanceof ImageHDU)) {
-            System.err.println("Error: The primary HDU is not an ImageHDU.");
-            return;
-        }
+                System.err.println("Error: The primary HDU is not an ImageHDU.");
+                return;
+            }
 
-        // Cast the primary HDU to an ImageHDU
-        ImageHDU imageHDU = (ImageHDU) hdu;
+            // Cast the primary HDU to an ImageHDU
+            ImageHDU imageHDU = (ImageHDU) hdu;
 
-        // Get the data from the ImageHDU as a 2D array
-        Object dataObject = imageHDU.getData().getData();
-        double[][] data = convertToDoubleArray(dataObject);
+            // Get the data from the ImageHDU as a 2D array
+            Object dataObject = imageHDU.getData().getData();
+            double[][] data = convertToDoubleArray(dataObject);
 
-        // Create a list to store the detected hot pixels
-        List<HotPixel> hotPixels = new ArrayList<>();
+            // Create a list to store the detected hot pixels
+            List<HotPixel> hotPixels = new ArrayList<>();
 
-        // Get the dimensions of the image
-        int imageWidth = imageHDU.getAxes()[1];
-        int imageHeight = imageHDU.getAxes()[0];
+            // Get the dimensions of the image
+            int imageWidth = imageHDU.getAxes()[1];
+            int imageHeight = imageHDU.getAxes()[0];
 
-        // Loop through all pixels in the image and detect hot pixels
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                double pixelValue = HotPixelDetector.getPixelValue(data, x, y);
-                if (pixelValue >= hotPixelThreshold) {
-                    hotPixels.add(new HotPixel(x, y, pixelValue));
+            // Loop through all pixels in the image and detect hot pixels
+            for (int y = 0; y < imageHeight; y++) {
+                for (int x = 0; x < imageWidth; x++) {
+                    double pixelValue = HotPixelDetector.getPixelValue(data, x, y);
+                    if (pixelValue >= hotPixelThreshold) {
+                        hotPixels.add(new HotPixel(x, y, pixelValue));
+                    }
                 }
             }
-        }
 
-        // Initialize enhancedData with the original data
-        double[][] enhancedData = data;
+            // Initialize enhancedData with the original data
+            double[][] enhancedData = data;
 
-        // Apply contrast stretching to enhance the image
-        enhancedData = ImageEnhancer.contrastStretch(enhancedData);
+            // Apply contrast stretching to enhance the image
+            enhancedData = ImageEnhancer.contrastStretch(enhancedData);
 
-        // Apply sharpening to enhance the image
-        enhancedData = ImageEnhancer.sharpen(enhancedData);
+            // Apply sharpening to enhance the image
+            enhancedData = ImageEnhancer.sharpen(enhancedData);
 
-        // Apply de-noising to enhance the image
-        enhancedData = ImageEnhancer.denoise(enhancedData);
+            // Apply de-noising to enhance the image
+            enhancedData = ImageEnhancer.denoise(enhancedData);
 
 
-        // Print the number of hot pixels detected and their coordinates and values in the console
-        System.out.println("Number of hot pixels detected: " + hotPixels.size());
-        for (HotPixel hotPixel : hotPixels) {
-            System.out.println("Hot pixel at (x=" + hotPixel.getX() + ", y=" + hotPixel.getY() +
-                    ") with value: " + hotPixel.getValue());
-        }
-
-        // If hot pixels are detected, save the processed images and the original
-        if (!hotPixels.isEmpty()) {
-
-            String fileName = new File(fitsFilePath).getName();
-
-            String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
-            String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
-
-            File fileOutputDir = new File(fileOutputFolder);
-
-            // Create a folder for each file in the output directory if it doesn't exist
-            if (!fileOutputDir.exists()) {
-                fileOutputDir.mkdir();
+            // Print the number of hot pixels detected and their coordinates and values in the console
+            System.out.println("Number of hot pixels detected: " + hotPixels.size());
+            for (HotPixel hotPixel : hotPixels) {
+                System.out.println("Hot pixel at (x=" + hotPixel.getX() + ", y=" + hotPixel.getY() +
+                        ") with value: " + hotPixel.getValue());
             }
 
-            // File paths for the marked, original, and enhanced images
-            String markedImageFilePath = fileOutputFolder + "/marked_" + fileNameWithoutExtension + ".jpg";
-            String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
-            String enhancedImageFilePath = fileOutputFolder + "/enhanced_" + fileNameWithoutExtension + ".jpg";
+            // If hot pixels are detected, save the processed images and the original
+            if (!hotPixels.isEmpty()) {
 
-            // Create a FitsImage object to hold the data and hot pixels for the marked image
-            FitsImage fitsImage = new FitsImage(data, imageWidth, imageHeight, hotPixels);
+                String fileName = new File(fitsFilePath).getName();
 
-            // Mark hot pixels in the image and save the marked image
-            HotPixelMarker.markHotPixelsAndSave(fitsImage, hotPixelMarkerSize, markedImageFilePath);
+                String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+                String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
 
-            // Save the original image as JPEG
-            saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
+                File fileOutputDir = new File(fileOutputFolder);
 
-            // Save the enhanced image as JPEG
-            saveFitsImageAsJpeg(enhancedData, imageWidth, imageHeight, enhancedImageFilePath);
+                // Create a folder for each file in the output directory if it doesn't exist
+                if (!fileOutputDir.exists()) {
+                    fileOutputDir.mkdir();
+                }
 
-            // debug: see if the image was processed and saved in the console
-            System.out.println("Images for file '" + fileName + "' processed and saved.");
+                // File paths for the marked, original, and enhanced images
+                String markedImageFilePath = fileOutputFolder + "/marked_" + fileNameWithoutExtension + ".jpg";
+                String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
+                String enhancedImageFilePath = fileOutputFolder + "/enhanced_" + fileNameWithoutExtension + ".jpg";
 
-        } else {
+                // Create a FitsImage object to hold the data and hot pixels for the marked image
+                FitsImage fitsImage = new FitsImage(data, imageWidth, imageHeight, hotPixels);
 
-            // If no hot pixels are detected, save the original image as JPEG only
-            System.out.println("No hot pixels detected in the image.");
+                // Mark hot pixels in the image and save the marked image
+                HotPixelMarker.markHotPixelsAndSave(fitsImage, hotPixelMarkerSize, markedImageFilePath);
 
-            // Extract the file name and remove the file extension to create a new output folder
-            String fileName = new File(fitsFilePath).getName();
+                // Save the original image as JPEG
+                saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
 
-            String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
-            String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
+                // Save the enhanced image as JPEG
+                saveFitsImageAsJpeg(enhancedData, imageWidth, imageHeight, enhancedImageFilePath);
 
-            // Create a file object for the output folder
-            File fileOutputDir = new File(fileOutputFolder);
+                // debug: see if the image was processed and saved in the console
+                System.out.println("Images for file '" + fileName + "' processed and saved.");
 
-            // Create a folder for each file in the output directory if it doesn't exist
-            if (!fileOutputDir.exists()) {
-                fileOutputDir.mkdir();
-            }
+            } else {
 
-            // Save the original image as JPEG in the output folder
-            String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
+                // If no hot pixels are detected, save the original image as JPEG only
+                System.out.println("No hot pixels detected in the image.");
 
-            // Check the length of the data array in terminal
-            System.out.println("Data array length: " + data.length);
+                // Extract the file name and remove the file extension to create a new output folder
+                String fileName = new File(fitsFilePath).getName();
 
-            // Call to Utility Method to save the image in the output folder
-            saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
+                String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+                String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
 
-            // Print save status message in terminal
-            System.out.println("Images for file '" + fileName + "' processed and saved.");}
+                // Create a file object for the output folder
+                File fileOutputDir = new File(fileOutputFolder);
+
+                // Create a folder for each file in the output directory if it doesn't exist
+                if (!fileOutputDir.exists()) {
+                    fileOutputDir.mkdir();
+                }
+
+                // Save the original image as JPEG in the output folder
+                String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
+
+                // Check the length of the data array in terminal
+                System.out.println("Data array length: " + data.length);
+
+                // Call to Utility Method to save the image in the output folder
+                saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
+
+                // Print save status message in terminal
+                System.out.println("Images for file '" + fileName + "' processed and saved.");}
 
         } catch (FitsException e) {
 
@@ -208,7 +208,7 @@ public class AnomalyDetectionProcessor {
         if (dataObject instanceof double[][]) {
             return (double[][]) dataObject;
 
-        // Check if the dataObject is of type float[][] (needs conversion to double[][])
+            // Check if the dataObject is of type float[][] (needs conversion to double[][])
         } else if (dataObject instanceof float[][]) {
 
             // Read floatData

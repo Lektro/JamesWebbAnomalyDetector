@@ -32,7 +32,7 @@ public class FitsFileProcessor {
             // Process the FITS file and save the resulting images.
             processor.processAndSaveImages();
 
-        // If there is an exception during processing, print the stack trace for debugging.
+            // If there is an exception during processing, print the stack trace for debugging.
         } catch (FitsException | IOException e) {
             e.printStackTrace();
         }
