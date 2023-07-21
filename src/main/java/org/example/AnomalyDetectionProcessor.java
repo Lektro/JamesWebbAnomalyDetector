@@ -100,7 +100,7 @@ public class AnomalyDetectionProcessor {
         enhancedData = ImageEnhancer.sharpen(enhancedData);
 
         // Apply denoising to enhance the image
-       // enhancedData = ImageEnhancer.denoise(enhancedData);
+        enhancedData = ImageEnhancer.denoise(enhancedData);
 
 
         // Print the number of hot pixels detected and their coordinates and values in the console
