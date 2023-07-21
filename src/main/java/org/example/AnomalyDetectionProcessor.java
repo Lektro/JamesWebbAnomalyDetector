@@ -144,8 +144,6 @@ public class AnomalyDetectionProcessor {
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
 
             // Save the enhanced image as JPEG
-            // Save the enhanced image as JPEG
-            //String enhancedImageFilePath = fileOutputFolder + "/enhanced_" + fileNameWithoutExtension + ".jpg";
             saveFitsImageAsJpeg(enhancedData, imageWidth, imageHeight, enhancedImageFilePath);
 
             // debug: see if the image was processed and saved in the console
