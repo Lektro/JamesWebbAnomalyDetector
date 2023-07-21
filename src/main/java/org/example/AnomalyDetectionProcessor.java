@@ -5,6 +5,8 @@ import nom.tam.fits.Fits;
 import nom.tam.fits.FitsException;
 import nom.tam.fits.ImageHDU;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +20,10 @@ import static org.example.HotPixelMarker.scalePixelValueToRGB;
 public class AnomalyDetectionProcessor {
 
     // Fields to store the paths and parameters for processing
-    private String fitsFilePath;
-    private String outputFolder;
-    private double hotPixelThreshold;
-    private int hotPixelMarkerSize;
+    final String fitsFilePath;
+    final String outputFolder;
+    final double hotPixelThreshold;
+    final int hotPixelMarkerSize;
 
     // Constructor to initialize the AnomalyDetectionProcessor object
     public AnomalyDetectionProcessor(String fitsFilePath, String outputFolder,
@@ -34,8 +36,10 @@ public class AnomalyDetectionProcessor {
 
     // Method to process and save the images
     public void processAndSaveImages() throws FitsException, IOException {
-        // Create a Fits object to read the FITS file
-        Fits fits = new Fits(fitsFilePath);
+        try {
+            // Create a Fits object to read the FITS file
+            Fits fits = new Fits(fitsFilePath);
+
 
         // Get the number of Header Data Units (HDUs) in the FITS file
         int numHDUs = fits.getNumberOfHDUs();
@@ -51,6 +55,7 @@ public class AnomalyDetectionProcessor {
                 System.out.println("Image axes: " + imageHDU.getAxes()[0] + " x " + imageHDU.getAxes()[1]);
             }
         }
+
 
         // Get the primary HDU, which is typically the second HDU in the FITS file (index 1)
         BasicHDU<?> hdu = fits.getHDU(1);
@@ -169,6 +174,13 @@ public class AnomalyDetectionProcessor {
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
             System.out.println("Images for file '" + fileName + "' processed and saved.");
         }
+        } catch (FitsException e) {
+            // Handle the FitsException here, for example, log the error or show an error message
+            e.printStackTrace();
+        } catch (IOException e) {
+            // Handle any other IOException that might occur during file handling
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -218,7 +230,6 @@ public class AnomalyDetectionProcessor {
      * @param outputFilePath The file path where the JPEG image will be saved.
      */
     private static void saveFitsImageAsJpeg(double[][] data, int width, int height, String outputFilePath) {
-
         // Create a new BufferedImage with the specified width and height
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -226,28 +237,32 @@ public class AnomalyDetectionProcessor {
         double minValue = getMinPixelValue(data);
         double maxValue = getMaxPixelValue(data);
 
+        // Define the color scale for mapping pixel values to RGB colors
+        // For example, you can use a gradient from blue to red
+        Color[] colorScale = createNaturalColorScale();
+
         // Get the height and width of the 2D data array
-        int dataHeight = data[0].length; // Height of the data array
-        int dataWidth = data[0].length; // Width of the data array
+        int dataHeight = data.length;
+        int dataWidth = data[0].length;
 
         // Loop through each pixel of the image and set its RGB value based on the pixel value in the data array
         for (int y = 0; y < height && y < dataHeight; y++) {
             for (int x = 0; x < width && x < dataWidth; x++) {
                 double pixelValue = data[y][x];
-                int rgbValue = scalePixelValueToRGB(pixelValue, minValue, maxValue);
+                int rgbValue = scalePixelValueToRGB(pixelValue, minValue, maxValue, colorScale);
                 image.setRGB(x, y, rgbValue);
             }
         }
 
         try {
             // You can change the format to PNG, BMP, etc.
-            String imageFormat = "JPEG"; // You can change the format to PNG, BMP, etc.
+            String imageFormat = "JPEG";
 
             // Create a new File object representing the output file path
-            java.io.File outputFile = new java.io.File(outputFilePath);
+            File outputFile = new File(outputFilePath);
 
             // Write the BufferedImage as a your chosen image format to the output file
-            javax.imageio.ImageIO.write(image, imageFormat, outputFile);
+            ImageIO.write(image, imageFormat, outputFile);
 
             // Print a message to indicate that the image has been saved successfully
             System.out.println("Image saved as '" + outputFilePath + "'.");
@@ -257,4 +272,29 @@ public class AnomalyDetectionProcessor {
             e.printStackTrace();
         }
     }
+    // Utility method to map the pixel value to an RGB color based on the color scale
+    private static int scalePixelValueToRGB(double pixelValue, double minValue, double maxValue, Color[] colorScale) {
+        int colorScaleSteps = colorScale.length - 1;
+        double normalizedValue = (pixelValue - minValue) / (maxValue - minValue);
+        int colorIndex = (int) (normalizedValue * colorScaleSteps);
+        colorIndex = Math.min(colorIndex, colorScaleSteps - 1);
+        return colorScale[colorIndex].getRGB();
+    }
+
+
+    // Utility method to create a natural grayscale color scale with a slight blue tint
+    private static Color[] createNaturalColorScale() {
+        int numColors = 256;
+        Color[] colorScale = new Color[numColors];
+        for (int i = 0; i < numColors; i++) {
+            int value = i;
+            int r = value;
+            int g = value;
+            int b = Math.min(value + 30, 255); // Add a slight blue tint to the grayscale
+
+            colorScale[i] = new Color(r, g, b);
+        }
+        return colorScale;
+    }
+
 }
