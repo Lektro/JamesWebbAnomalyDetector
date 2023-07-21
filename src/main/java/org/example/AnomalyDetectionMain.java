@@ -34,6 +34,7 @@ public class AnomalyDetectionMain {
 
         // Loop through all the files in the given folder
         for (int fileIndex = 0; fileIndex < files.length; fileIndex++) {
+
             File file = files[fileIndex];
             String fitsFilePath = file.getAbsolutePath();
 

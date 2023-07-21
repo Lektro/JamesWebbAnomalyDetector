@@ -120,8 +120,10 @@ public class AnomalyDetectionProcessor {
         if (!hotPixels.isEmpty()) {
 
             String fileName = new File(fitsFilePath).getName();
+
             String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
             String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
+
             File fileOutputDir = new File(fileOutputFolder);
 
             // Create a folder for each file in the output directory if it doesn't exist
@@ -156,6 +158,7 @@ public class AnomalyDetectionProcessor {
 
             // Extract the file name and remove the file extension to create a new output folder
             String fileName = new File(fitsFilePath).getName();
+
             String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
             String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
 
@@ -170,13 +173,16 @@ public class AnomalyDetectionProcessor {
             // Save the original image as JPEG in the output folder
             String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
             System.out.println("Data array length: " + data.length); // Check the length of the data array
-
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
+
+            // Print save status message in terminal
             System.out.println("Images for file '" + fileName + "' processed and saved.");}
 
         } catch (FitsException e) {
+
             // Handle the FitsException here, for example, log the error or show an error message
             e.printStackTrace();
+
         } catch (IOException e) {
             // Handle any other IOException that might occur during file handling
             e.printStackTrace();
@@ -198,8 +204,11 @@ public class AnomalyDetectionProcessor {
         // Check if the dataObject is of type double[][] (already a double array)
         if (dataObject instanceof double[][]) {
             return (double[][]) dataObject;
+
         // Check if the dataObject is of type float[][] (needs conversion to double[][])
         } else if (dataObject instanceof float[][]) {
+
+            // Read floatData
             float[][] floatData = (float[][]) dataObject;
             int rows = floatData.length;
             int cols = floatData[0].length;
