@@ -78,7 +78,7 @@ public class AnomalyDetectionProcessor {
 
         // Get the dimensions of the image
         int imageWidth = imageHDU.getAxes()[1];
-        int imageHeight = imageHDU.getAxes()[1];
+        int imageHeight = imageHDU.getAxes()[0];
 
         // Loop through all pixels in the image and detect hot pixels
         for (int y = 0; y < imageHeight; y++) {
@@ -100,7 +100,7 @@ public class AnomalyDetectionProcessor {
         enhancedData = ImageEnhancer.sharpen(enhancedData);
 
         // Apply denoising to enhance the image
-        enhancedData = ImageEnhancer.denoise(enhancedData);
+       // enhancedData = ImageEnhancer.denoise(enhancedData);
 
 
         // Print the number of hot pixels detected and their coordinates and values in the console
@@ -164,6 +164,8 @@ public class AnomalyDetectionProcessor {
 
             // Save the original image as JPEG in the output folder
             String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
+            System.out.println("Data array length: " + data.length); // Check the length of the data array
+
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
             System.out.println("Images for file '" + fileName + "' processed and saved.");
         }
@@ -225,8 +227,8 @@ public class AnomalyDetectionProcessor {
         double maxValue = getMaxPixelValue(data);
 
         // Get the height and width of the 2D data array
-        int dataHeight = data.length; // Assuming 'data' is a 2D array
-        int dataWidth = data[0].length; // Assuming all rows have the same width
+        int dataHeight = data[0].length; // Height of the data array
+        int dataWidth = data[0].length; // Width of the data array
 
         // Loop through each pixel of the image and set its RGB value based on the pixel value in the data array
         for (int y = 0; y < height && y < dataHeight; y++) {

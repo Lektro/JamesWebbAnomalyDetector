@@ -3,11 +3,13 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.HotPixelDetector.getMaxPixelValue;
+import static org.example.HotPixelDetector.getMinPixelValue;
+
 public class ImageEnhancer {
 
     // Method for contrast stretching to enhance image quality
     public static double[][] contrastStretch(double[][] data) {
-
         // Check if the image data is valid (not null and has non-zero dimensions)
         if (data == null || data.length == 0 || data[0].length == 0) {
             System.err.println("Error: Invalid image data for contrast stretching.");
@@ -15,37 +17,18 @@ public class ImageEnhancer {
         }
 
         // Find the minimum and maximum pixel values in the data
-        double min = Double.MAX_VALUE;
-        double max = Double.MIN_VALUE;
-
-        // Loop through each row of the data array
-        for (double[] row : data) {
-            // Loop through each pixel value in the row
-            for (double pixelValue : row) {
-
-                // Find the minimum pixel value in the data
-                if (pixelValue < min) {
-                    min = pixelValue;
-                }
-                // Find the maximum pixel value in the data
-                if (pixelValue > max) {
-                    max = pixelValue;
-                }
-            }
-        }
+        double min = getMinPixelValue(data);
+        double max = getMaxPixelValue(data);
 
         // Apply contrast stretching to enhance the image
         double[][] enhancedData = new double[data.length][data[0].length];
 
         // Loop through each row of the data array
         for (int y = 0; y < data.length; y++) {
-
             // Loop through each pixel value in the row
             for (int x = 0; x < data[0].length; x++) {
-
                 // Get the pixel value at the current location
                 double pixelValue = data[y][x];
-
                 // Apply contrast stretching formula to enhance the pixel value
                 enhancedData[y][x] = (pixelValue - min) / (max - min) * 255.0;
             }
@@ -53,13 +36,13 @@ public class ImageEnhancer {
 
         // Return the enhanced data array
         return enhancedData;
-
     }
 
 
     // Add other image enhancement methods as needed
     // Sharpening method using a simple Laplacian kernel
     public static double[][] sharpen(double[][] data) {
+        // Check if the image data is valid (not null and has non-zero dimensions)
         if (data == null || data.length == 0 || data[0].length == 0) {
             System.err.println("Error: Invalid image data for sharpening.");
             return null;
@@ -71,6 +54,7 @@ public class ImageEnhancer {
         double[][] sharpenedData = new double[height][width];
         double[][] laplacianKernel = {{-1, -1, -1}, {-1, 9, -1}, {-1, -1, -1}};
 
+        // Apply the kernel to the inner portion of the data array to avoid out-of-bounds indexing
         for (int y = 1; y < height - 1; y++) {
             for (int x = 1; x < width - 1; x++) {
                 double sum = 0.0;
@@ -83,8 +67,20 @@ public class ImageEnhancer {
             }
         }
 
+        // Copy the boundary pixels from the original data to the sharpened data
+        for (int y = 0; y < height; y++) {
+            sharpenedData[y][0] = data[y][0]; // Left boundary
+            sharpenedData[y][width - 1] = data[y][width - 1]; // Right boundary
+        }
+
+        for (int x = 0; x < width; x++) {
+            sharpenedData[0][x] = data[0][x]; // Top boundary
+            sharpenedData[height - 1][x] = data[height - 1][x]; // Bottom boundary
+        }
+
         return sharpenedData;
     }
+
 
     // Denoising using median filtering
     public static double[][] denoise(double[][] data) {

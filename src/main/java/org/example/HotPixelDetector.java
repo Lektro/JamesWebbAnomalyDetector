@@ -4,6 +4,11 @@ public class HotPixelDetector {
 
     // Method to find the maximum pixel value in the 2D data array
     static double getMaxPixelValue(Object data) {
+        if (data == null || !(data instanceof double[][])) {
+            // Handle the case when data is null or not a valid 2D array
+            return Double.NaN; // Return a special value to indicate invalid data
+        }
+
         double max = Double.MIN_VALUE;
         double[][] dataArray = (double[][]) data;
         for (double[] row : dataArray) {
@@ -16,8 +21,14 @@ public class HotPixelDetector {
         return max;
     }
 
+
     // Method to find the minimum pixel value in the 2D data array
     public static double getMinPixelValue(double[][] data) {
+        if (data == null || data.length == 0 || data[0] == null || data[0].length == 0) {
+            // Handle the case when data is null or empty
+            return Double.NaN; // Return a special value to indicate invalid data
+        }
+
         double minValue = Double.MAX_VALUE;
         for (int y = 0; y < data.length; y++) {
             for (int x = 0; x < data[y].length; x++) {
@@ -29,6 +40,7 @@ public class HotPixelDetector {
         }
         return minValue;
     }
+
 
     // Method to get the pixel value from the 2D data array at the specified (x, y) coordinates
     static double getPixelValue(double[][] data, int x, int y) {
