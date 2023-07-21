@@ -1,5 +1,10 @@
 package org.example.processing;
 
+import org.example.models.HotPixel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HotPixelDetector {
 
     // Method to find the maximum pixel value in the 2D data array
@@ -21,7 +26,6 @@ public class HotPixelDetector {
         }
         return max;
     }
-
 
     // Method to find the minimum pixel value in the 2D data array
     public static double getMinPixelValue(double[][] data) {
@@ -51,5 +55,25 @@ public class HotPixelDetector {
         }
         // Default value for out-of-bounds cases
         return 0.0;
+    }
+
+    // Method to detect hot pixels
+    public static List<HotPixel> detectHotPixels(double[][] data, double hotPixelThreshold) {
+        List<HotPixel> hotPixels = new ArrayList<>();
+
+        int imageWidth = data[0].length;
+        int imageHeight = data.length;
+
+        // Loop through all pixels in the image and detect hot pixels
+        for (int y = 0; y < imageHeight; y++) {
+            for (int x = 0; x < imageWidth; x++) {
+                double pixelValue = data[y][x];
+                if (pixelValue >= hotPixelThreshold) {
+                    hotPixels.add(new HotPixel(x, y, pixelValue));
+                }
+            }
+        }
+
+        return hotPixels;
     }
 }

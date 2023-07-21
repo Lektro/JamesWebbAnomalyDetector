@@ -14,9 +14,21 @@ public class AnomalyDetectionMain {
         String inputFolderPath = "C:/Temp/DataInput";
         String outputFolderPath = "C:/Temp/DataOutput";
 
-        // Initialize Folder / File Processor in prep for api connection
-        FitsFolderProcessor folderProcessor = new FitsFolderProcessor(inputFolderPath, outputFolderPath,
-                hotPixelThreshold, hotPixelMarkerSize);
-        folderProcessor.processAllFiles();
+        try {
+            // Initialize the FitsFolderProcessor to process the FITS files in the input folder.
+            FitsFolderProcessor folderProcessor = new FitsFolderProcessor(inputFolderPath, outputFolderPath,
+                    hotPixelThreshold, hotPixelMarkerSize);
+
+            // Call the processAllFiles method to start processing the FITS files.
+            folderProcessor.processAllFiles();
+
+        } catch (Exception e) {
+
+            // Catch any exception that might occur during the processing.
+            e.printStackTrace();
+
+            // user-friendly message or log the error.
+            System.out.println("An error occurred during processing: " + e.getMessage());
+        }
     }
 }

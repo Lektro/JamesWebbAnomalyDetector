@@ -61,5 +61,4 @@ public class HotPixelMarker {
         int rgbValue = (int) (normalizedValue * 255);
         return new Color(rgbValue, rgbValue, rgbValue).getRGB();
     }
-
 }

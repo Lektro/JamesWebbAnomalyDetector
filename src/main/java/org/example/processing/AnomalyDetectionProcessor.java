@@ -41,14 +41,13 @@ public class AnomalyDetectionProcessor {
             // Create a Fits object to read the FITS file
             Fits fits = new Fits(fitsFilePath);
 
+            // Get the number of Header Data Units (HDUs) in the FITS file
+            int numHDUs = fits.getNumberOfHDUs();
 
-        // Get the number of Header Data Units (HDUs) in the FITS file
-        int numHDUs = fits.getNumberOfHDUs();
-
-        // Loop through all HDUs in the FITS file
-        for (int i = 0; i < numHDUs; i++) {
-            BasicHDU<?> hdu = fits.getHDU(i);
-            System.out.println("HDU " + i + " type: " + hdu.getClass().getSimpleName());
+            // Loop through all HDUs in the FITS file
+            for (int i = 0; i < numHDUs; i++) {
+                BasicHDU<?> hdu = fits.getHDU(i);
+                System.out.println("HDU " + i + " type: " + hdu.getClass().getSimpleName());
 
             // If the HDU is an ImageHDU, print its image axes
             if (hdu instanceof ImageHDU) {
@@ -116,7 +115,7 @@ public class AnomalyDetectionProcessor {
                     ") with value: " + hotPixel.getValue());
         }
 
-        // If hot pixels are detected, save the processed images
+        // If hot pixels are detected, save the processed images and the original
         if (!hotPixels.isEmpty()) {
 
             String fileName = new File(fitsFilePath).getName();
@@ -172,7 +171,11 @@ public class AnomalyDetectionProcessor {
 
             // Save the original image as JPEG in the output folder
             String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
-            System.out.println("Data array length: " + data.length); // Check the length of the data array
+
+            // Check the length of the data array in terminal
+            System.out.println("Data array length: " + data.length);
+
+            // Call to Utility Method to save the image in the output folder
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
 
             // Print save status message in terminal
@@ -229,7 +232,6 @@ public class AnomalyDetectionProcessor {
         return null;
     }
 
-
     /**
      * Utility method to save the FITS image as JPEG
      * Saves the FITS image as a JPEG file with the specified pixel data and dimensions.
@@ -282,6 +284,7 @@ public class AnomalyDetectionProcessor {
             e.printStackTrace();
         }
     }
+
     // Utility method to map the pixel value to an RGB color based on the color scale
     private static int scalePixelValueToRGB(double pixelValue, double minValue, double maxValue, Color[] colorScale) {
         int colorScaleSteps = colorScale.length - 1;
@@ -290,7 +293,6 @@ public class AnomalyDetectionProcessor {
         colorIndex = Math.min(colorIndex, colorScaleSteps - 1);
         return colorScale[colorIndex].getRGB();
     }
-
 
     // Utility method to create a natural grayscale color scale with a slight blue tint
     private static Color[] createNaturalColorScale() {
@@ -308,5 +310,4 @@ public class AnomalyDetectionProcessor {
         }
         return colorScale;
     }
-
 }

@@ -2,10 +2,17 @@ package org.example.models;
 
 import java.util.List;
 
+/**
+ * Represents a FITS image along with its associated hot pixels.
+ */
 public class FitsImage {
+
+    // The 2D array representing the pixel data of the FITS image.
     private final double[][] data;
     private final int width;
     private final int height;
+
+    // A list of hot pixels detected in the FITS image.
     private final List<HotPixel> hotPixels;
 
     public FitsImage(double[][] data, int width, int height, List<HotPixel> hotPixels) {

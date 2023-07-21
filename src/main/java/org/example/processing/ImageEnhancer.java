@@ -33,7 +33,6 @@ public class ImageEnhancer {
                 enhancedData[y][x] = (pixelValue - min) / (max - min) * 255.0;
             }
         }
-
         // Return the enhanced data array
         return enhancedData;
     }
@@ -76,10 +75,9 @@ public class ImageEnhancer {
             sharpenedData[0][x] = data[0][x]; // Top boundary
             sharpenedData[height - 1][x] = data[height - 1][x]; // Bottom boundary
         }
-
+        // Return the sharpened data array
         return sharpenedData;
     }
-
 
     // De-noising using median filtering
     public static double[][] denoise(double[][] data) {
@@ -107,9 +105,7 @@ public class ImageEnhancer {
                 denoisedData[y][x] = neighborValues.get(4); // Use the median value as the de-noised pixel value
             }
         }
-
+        // Return the de-noised data array
         return denoisedData;
     }
-
-
 }
