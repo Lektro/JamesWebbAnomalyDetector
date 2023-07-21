@@ -90,8 +90,18 @@ public class AnomalyDetectionProcessor {
             }
         }
 
-        // Enhance the image using contrast stretching
-        double[][] enhancedImage = ImageEnhancer.contrastStretch(data);
+        // Initialize enhancedData with the original data
+        double[][] enhancedData = data;
+
+        // Apply contrast stretching to enhance the image
+        enhancedData = ImageEnhancer.contrastStretch(enhancedData);
+
+        // Apply sharpening to enhance the image
+        enhancedData = ImageEnhancer.sharpen(enhancedData);
+
+        // Apply denoising to enhance the image
+        enhancedData = ImageEnhancer.denoise(enhancedData);
+
 
         // Print the number of hot pixels detected and their coordinates and values in the console
         System.out.println("Number of hot pixels detected: " + hotPixels.size());
@@ -128,7 +138,9 @@ public class AnomalyDetectionProcessor {
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
 
             // Save the enhanced image as JPEG
-            saveFitsImageAsJpeg(enhancedImage, imageWidth, imageHeight, enhancedImageFilePath);
+            // Save the enhanced image as JPEG
+            //String enhancedImageFilePath = fileOutputFolder + "/enhanced_" + fileNameWithoutExtension + ".jpg";
+            saveFitsImageAsJpeg(enhancedData, imageWidth, imageHeight, enhancedImageFilePath);
 
             // debug: see if the image was processed and saved in the console
             System.out.println("Images for file '" + fileName + "' processed and saved.");

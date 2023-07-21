@@ -5,7 +5,7 @@ import java.io.File;
 public class AnomalyDetectionMain {
 
     public static void main(String[] args) {
-        // adjust these value's to your liking
+        // Adjust these value's to your liking
         double hotPixelThreshold = 550.0;
         int hotPixelMarkerSize = 15;
 
@@ -34,7 +34,7 @@ public class AnomalyDetectionMain {
             File file = files[fileIndex];
             String fitsFilePath = file.getAbsolutePath();
 
-            // Starting the anomaly detection process.. You can add your own detection processes there
+            // Starting the anomaly detection process. You can add your own detection processes there
             try {
                 AnomalyDetectionProcessor processor = new AnomalyDetectionProcessor(fitsFilePath,
                         outputFolder, hotPixelThreshold, hotPixelMarkerSize);
