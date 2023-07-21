@@ -226,6 +226,7 @@ public class AnomalyDetectionProcessor {
             e.printStackTrace();
         }
     }
+
     // Utility method to map the pixel value to an RGB color based on the color scale
     private static int scalePixelValueToRGB(double pixelValue, double minValue, double maxValue, Color[] colorScale) {
         int colorScaleSteps = colorScale.length - 1;

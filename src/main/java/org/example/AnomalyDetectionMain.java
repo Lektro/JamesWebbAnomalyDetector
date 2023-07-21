@@ -1,8 +1,6 @@
 package org.example;
 
-import org.example.processing.AnomalyDetectionProcessor;
-
-import java.io.File;
+import org.example.processing.files.FitsFolderProcessor;
 
 public class AnomalyDetectionMain {
 
@@ -16,7 +14,17 @@ public class AnomalyDetectionMain {
         String inputFolderPath = "C:/Temp/DataInput";
         String outputFolderPath = "C:/Temp/DataOutput";
 
-        // Initialize File Objects
+        // Process Folders/Files in preparation to api input
+        FitsFolderProcessor folderProcessor = new FitsFolderProcessor(inputFolderPath, outputFolderPath,
+                hotPixelThreshold, hotPixelMarkerSize);
+        folderProcessor.processAllFiles();
+    }
+}
+
+
+
+
+ /*       // Initialize File Objects
         File folder = new File(inputFolderPath);
         File outputDir = new File(outputFolderPath);
 
@@ -56,7 +64,5 @@ public class AnomalyDetectionMain {
             // Catching any exceptions
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        }
-    }
-}
+            }*/
+
