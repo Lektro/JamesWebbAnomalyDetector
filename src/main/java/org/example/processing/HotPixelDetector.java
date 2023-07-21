@@ -47,7 +47,6 @@ public class HotPixelDetector {
         return minValue;
     }
 
-
     // Method to get the pixel value from the 2D data array at the specified (x, y) coordinates
     static double getPixelValue(double[][] data, int x, int y) {
         if (data != null && y >= 0 && y < data.length && x >= 0 && x < data[y].length) {
