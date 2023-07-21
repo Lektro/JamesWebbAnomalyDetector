@@ -60,16 +60,17 @@ public class AnomalyDetectionProcessor {
         // Get the primary HDU, which is typically the second HDU in the FITS file (index 1)
         BasicHDU<?> hdu = fits.getHDU(1);
 
-        // Check if the primary HDU is null or not an ImageHDU
+/*        // Check if the primary HDU is null or not an ImageHDU
         if (hdu == null) {
             System.err.println("Error: FITS imageHDU is null or empty.");
             return;
         }
 
-        if (!(hdu instanceof ImageHDU)) {
+            // Check if the primary HDU is not an ImageHDU, and handle the error
+            if (!(hdu instanceof ImageHDU)) {
             System.err.println("Error: The primary HDU is not an ImageHDU.");
             return;
-        }
+        }*/
 
         // Cast the primary HDU to an ImageHDU
         ImageHDU imageHDU = (ImageHDU) hdu;
