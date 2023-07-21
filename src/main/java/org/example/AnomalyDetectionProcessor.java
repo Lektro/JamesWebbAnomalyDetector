@@ -157,34 +157,66 @@ public class AnomalyDetectionProcessor {
         }
     }
 
-    // Utility method to convert FITS data to double[][] so we can find the pixel locations
+    /**
+     * Utility method to convert FITS data to double[][] so we can find the pixel locations
+     * Converts the FITS data object to a 2D double array for processing.
+     *
+     * @param dataObject The FITS data object to be converted.
+     * @return A 2D double array representing the pixel values of the image.
+     *         If the input dataObject is of type double[][], it is returned directly.
+     *         If the input dataObject is of type float[][], it is converted to a double[][].
+     *         Returns null if the input dataObject is of an unsupported type.
+     */
     private static double[][] convertToDoubleArray(Object dataObject) {
+        // Check if the dataObject is of type double[][] (already a double array)
         if (dataObject instanceof double[][]) {
             return (double[][]) dataObject;
+        // Check if the dataObject is of type float[][] (needs conversion to double[][])
         } else if (dataObject instanceof float[][]) {
             float[][] floatData = (float[][]) dataObject;
             int rows = floatData.length;
             int cols = floatData[0].length;
+
+            // Create a new 2D double array to hold the converted pixel values
             double[][] doubleData = new double[rows][cols];
+
+            // Convert each pixel value from float to double and store in the new array
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
                     doubleData[i][j] = floatData[i][j];
                 }
             }
+            // Return the converted double array
             return doubleData;
         }
+        // Return null if the dataObject is of an unsupported type
         return null;
     }
 
-    // Utility method to save the FITS image as JPEG
+
+    /**
+     * Utility method to save the FITS image as JPEG
+     * Saves the FITS image as a JPEG file with the specified pixel data and dimensions.
+     *
+     * @param data          The 2D array containing the pixel values of the FITS image.
+     * @param width         The width of the image in pixels.
+     * @param height        The height of the image in pixels.
+     * @param outputFilePath The file path where the JPEG image will be saved.
+     */
     private static void saveFitsImageAsJpeg(double[][] data, int width, int height, String outputFilePath) {
+
+        // Create a new BufferedImage with the specified width and height
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        // Find the minimum and maximum pixel values in the data array
         double minValue = getMinPixelValue(data);
         double maxValue = getMaxPixelValue(data);
 
+        // Get the height and width of the 2D data array
         int dataHeight = data.length; // Assuming 'data' is a 2D array
         int dataWidth = data[0].length; // Assuming all rows have the same width
 
+        // Loop through each pixel of the image and set its RGB value based on the pixel value in the data array
         for (int y = 0; y < height && y < dataHeight; y++) {
             for (int x = 0; x < width && x < dataWidth; x++) {
                 double pixelValue = data[y][x];
@@ -196,10 +228,18 @@ public class AnomalyDetectionProcessor {
         try {
             // You can change the format to PNG, BMP, etc.
             String imageFormat = "JPEG"; // You can change the format to PNG, BMP, etc.
+
+            // Create a new File object representing the output file path
             java.io.File outputFile = new java.io.File(outputFilePath);
+
+            // Write the BufferedImage as a your chosen image format to the output file
             javax.imageio.ImageIO.write(image, imageFormat, outputFile);
+
+            // Print a message to indicate that the image has been saved successfully
             System.out.println("Image saved as '" + outputFilePath + "'.");
+
         } catch (IOException e) {
+            // If an exception occurs during image saving, print the stack trace for debugging
             e.printStackTrace();
         }
     }
