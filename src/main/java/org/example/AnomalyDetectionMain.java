@@ -2,7 +2,7 @@ package org.example;
 
 import java.io.File;
 
-public class AnomalyDetectionHotPixels {
+public class AnomalyDetectionMain {
 
     public static void main(String[] args) {
         String folderPath = "C:/Temp/DataInput";
