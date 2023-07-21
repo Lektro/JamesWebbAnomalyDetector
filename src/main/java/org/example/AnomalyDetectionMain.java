@@ -11,22 +11,22 @@ public class AnomalyDetectionMain {
         int hotPixelMarkerSize = 15;
 
         // Define folder paths
-        String folderPath = "C:/Temp/DataInput";
-        String outputFolder = "C:/Temp/DataOutput";
+        String inputFolderPath = "C:/Temp/DataInput";
+        String outputFolderPath = "C:/Temp/DataOutput";
 
-        // Initialize
-        File folder = new File(folderPath);
-        File outputDir = new File(outputFolder);
+        // Initialize File Objects
+        File folder = new File(inputFolderPath);
+        File outputDir = new File(outputFolderPath);
 
         // Create a folder to store the output images if it doesn't exist
         if (!outputDir.exists()) {
             outputDir.mkdir();
         }
 
-        // Convert filenames to lower case
+        // Convert .fits filenames to lower case
         File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".fits"));
 
-        // check if there fit files in the folder or not
+        // check if there .fits files in the folder or not
         if (files == null || files.length == 0) {
             System.out.println("No FITS files found in the folder.");
             return;
@@ -40,7 +40,7 @@ public class AnomalyDetectionMain {
             // Starting the anomaly detection process. You can add your own detection processes there
             try {
                 AnomalyDetectionProcessor processor = new AnomalyDetectionProcessor(fitsFilePath,
-                        outputFolder, hotPixelThreshold, hotPixelMarkerSize);
+                        outputFolderPath, hotPixelThreshold, hotPixelMarkerSize);
                 processor.processAndSaveImages();
 
                 // keep processing files until there are no new files to process
@@ -50,6 +50,7 @@ public class AnomalyDetectionMain {
                     System.out.println("All files processed.");
                 }
 
+            // Catching any exceptions
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -150,6 +150,7 @@ public class AnomalyDetectionProcessor {
             System.out.println("Images for file '" + fileName + "' processed and saved.");
 
         } else {
+
             // If no hot pixels are detected, save the original image as JPEG only
             System.out.println("No hot pixels detected in the image.");
 
@@ -171,8 +172,8 @@ public class AnomalyDetectionProcessor {
             System.out.println("Data array length: " + data.length); // Check the length of the data array
 
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
-            System.out.println("Images for file '" + fileName + "' processed and saved.");
-        }
+            System.out.println("Images for file '" + fileName + "' processed and saved.");}
+
         } catch (FitsException e) {
             // Handle the FitsException here, for example, log the error or show an error message
             e.printStackTrace();
