@@ -13,6 +13,8 @@ public class AnomalyDetectionMain {
         // Define folder paths
         String folderPath = "C:/Temp/DataInput";
         String outputFolder = "C:/Temp/DataOutput";
+
+        // Initialize
         File folder = new File(folderPath);
         File outputDir = new File(outputFolder);
 
