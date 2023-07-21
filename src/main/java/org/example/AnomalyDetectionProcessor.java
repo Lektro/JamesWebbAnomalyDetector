@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.example.HotPixelDetector.getMaxPixelValue;
 import static org.example.HotPixelDetector.getMinPixelValue;
-import static org.example.HotPixelMarker.scalePixelValueToRGB;
+//import static org.example.HotPixelMarker.scalePixelValueToRGB;
 
 public class AnomalyDetectionProcessor {
 
@@ -60,7 +60,7 @@ public class AnomalyDetectionProcessor {
         // Get the primary HDU, which is typically the second HDU in the FITS file (index 1)
         BasicHDU<?> hdu = fits.getHDU(1);
 
-/*        // Check if the primary HDU is null or not an ImageHDU
+        // Check if the primary HDU is null or not an ImageHDU
         if (hdu == null) {
             System.err.println("Error: FITS imageHDU is null or empty.");
             return;
@@ -70,7 +70,7 @@ public class AnomalyDetectionProcessor {
             if (!(hdu instanceof ImageHDU)) {
             System.err.println("Error: The primary HDU is not an ImageHDU.");
             return;
-        }*/
+        }
 
         // Cast the primary HDU to an ImageHDU
         ImageHDU imageHDU = (ImageHDU) hdu;
