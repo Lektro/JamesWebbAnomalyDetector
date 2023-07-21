@@ -28,6 +28,6 @@ public class ImageEnhancer {
         return enhancedData;
 
     }
-
     // Add other image enhancement methods as needed
+
 }

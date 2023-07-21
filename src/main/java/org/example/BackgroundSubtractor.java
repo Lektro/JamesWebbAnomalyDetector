@@ -1,3 +1,4 @@
+/*
 package org.example;
 
 public class BackgroundSubtractor {
@@ -31,3 +32,4 @@ public class BackgroundSubtractor {
 
     // Add other background subtraction methods as needed
 }
+*/

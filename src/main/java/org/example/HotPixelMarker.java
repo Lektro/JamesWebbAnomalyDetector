@@ -45,7 +45,7 @@ public class HotPixelMarker {
             String imageFormat = "JPEG"; // You can change the format to PNG, BMP, etc.
             java.io.File outputFile = new java.io.File(outputFilePath);
             javax.imageio.ImageIO.write(markedImage, imageFormat, outputFile);
-            System.out.println("Marked image saved as '" + outputFilePath + "'.");
+            System.out.println("Image saved as '" + outputFilePath + "'.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +57,4 @@ public class HotPixelMarker {
         int rgbValue = (int) (normalizedValue * 255);
         return new Color(rgbValue, rgbValue, rgbValue).getRGB();
     }
-
-    // Utility methods (same as before)
-    // ...
 }

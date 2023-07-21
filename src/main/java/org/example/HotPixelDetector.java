@@ -3,29 +3,6 @@ package org.example;
 public class HotPixelDetector {
 
     // Utility methods
-    public double getPixelValue(Object data, int x, int y) throws PixelValueException {
-        if (data instanceof double[][]) {
-            double[][] doubleData = (double[][]) data;
-            if (y >= 0 && y < doubleData.length && x >= 0 && x < doubleData[y].length) {
-                return doubleData[y][x];
-            }
-        } else if (data instanceof float[][]) {
-            float[][] floatData = (float[][]) data;
-            if (y >= 0 && y < floatData.length && x >= 0 && x < floatData[y].length) {
-                return floatData[y][x];
-            }
-        } else if (data instanceof int[][]) {
-            int[][] intData = (int[][]) data;
-            if (y >= 0 && y < intData.length && x >= 0 && x < intData[y].length) {
-                return intData[y][x];
-            }
-        }
-
-        throw new PixelValueException("Error: Invalid coordinates or unsupported data type.");
-    }
-
-
-
     static double getMaxPixelValue(Object data) {
         double max = Double.MIN_VALUE;
         double[][] dataArray = (double[][]) data;
@@ -58,10 +35,5 @@ public class HotPixelDetector {
         }
         // Default value for out-of-bounds cases
         return 0.0;
-    }
-    public class PixelValueException extends Exception {
-        public PixelValueException(String message) {
-            super(message);
-        }
     }
 }

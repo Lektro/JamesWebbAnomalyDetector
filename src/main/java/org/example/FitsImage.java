@@ -3,10 +3,10 @@ package org.example;
 import java.util.List;
 
 public class FitsImage {
-    private double[][] data;
-    private int width;
-    private int height;
-    private List<HotPixel> hotPixels;
+    private final double[][] data;
+    private final int width;
+    private final int height;
+    private final List<HotPixel> hotPixels;
 
     public FitsImage(double[][] data, int width, int height, List<HotPixel> hotPixels) {
         this.data = data;

@@ -18,16 +18,13 @@ import static org.example.HotPixelMarker.scalePixelValueToRGB;
 public class AnomalyDetectionHotPixels {
 
     public static void main(String[] args) {
-        // Replace "path/to/your/image.fits" with the actual file path of the FITS image
-        //String fitsFilePath = "C:/Temp/jw02733-o001_t001_nircam_clear-f090w_i2d.fits";
-
-
         // Replace "path/to/your/folder" with the folder containing the FITS files
         String folderPath = "C:/Temp/DataInput";
 
         // Create a folder to store the output images if it doesn't exist
         String outputFolder = "C:/Temp/DataOutput";
         File outputDir = new File(outputFolder);
+
         if (!outputDir.exists()) {
             outputDir.mkdir();
         }
@@ -87,14 +84,7 @@ public class AnomalyDetectionHotPixels {
 
                 double[][] data = convertToDoubleArray(dataObject);
 
-                // Get the image data as a 2D array
-                //double[][] data = (double[][]) imageHDU.getData().getData();
-
-                // Verify the dimensions of the image data
-                //int imageWidth = data[0].length;
-                //int imageHeight = data[0].length;
-
-                // Ensure data is not null before proceeding
+                // Ensure data is not null before proceeding (or it breaks)
                 if (data == null) {
                     System.err.println("Error: FITS data is null or empty.");
                     return;
@@ -117,13 +107,6 @@ public class AnomalyDetectionHotPixels {
 
                 // Enhance the image (choose the desired enhancement method)
                 double[][] enhancedImage = ImageEnhancer.contrastStretch(data); // or ImageEnhancer.histogramEqualization(data);
-
-                // Subtract background from the enhanced image
-                double[][] backgroundSubtractedImage = BackgroundSubtractor.subtractBackground(enhancedImage);
-
-                // Calibrate the background-subtracted image
-                double[][] calibratedImage = ImageCalibrator.calibrateImage(backgroundSubtractedImage);
-
 
                 // Output detected hot pixels to console
                 System.out.println("Number of hot pixels detected: " + hotPixels.size());
@@ -159,11 +142,25 @@ public class AnomalyDetectionHotPixels {
                     System.out.println("Images for file '" + fileName + "' processed and saved.");
                 } else {
                     System.out.println("No hot pixels detected in the image.");
+
+                    // Save the original image as JPEG with the original name
+                    String fileName = file.getName();
+                    String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+                    String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
+                    File fileOutputDir = new File(fileOutputFolder);
+                    if (!fileOutputDir.exists()) {
+                        fileOutputDir.mkdir();
+                    }
+                    String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
+                    saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
+                    System.out.println("Images for file '" + fileName + "' processed and saved.");
                 }
 
 
             } catch (FitsException | IOException e) {
                 e.printStackTrace();
+            } finally {
+                System.out.println("Batch Ended");
             }
         }
     }
@@ -227,6 +224,7 @@ public class AnomalyDetectionHotPixels {
         }
 
         try {
+            // You can change the format to PNG, BMP, etc.
             String imageFormat = "JPEG"; // You can change the format to PNG, BMP, etc.
             java.io.File outputFile = new java.io.File(outputFilePath);
             javax.imageio.ImageIO.write(image, imageFormat, outputFile);
