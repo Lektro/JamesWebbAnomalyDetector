@@ -6,7 +6,7 @@ public class AnomalyDetectionMain {
 
     public static void main(String[] args) {
         // Adjust these value's to your liking
-        double hotPixelThreshold = 550.0;
+        double hotPixelThreshold = 420.0;
         int hotPixelMarkerSize = 15;
 
         // Def folder paths
