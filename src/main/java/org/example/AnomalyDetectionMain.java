@@ -14,7 +14,7 @@ public class AnomalyDetectionMain {
         String inputFolderPath = "C:/Temp/DataInput";
         String outputFolderPath = "C:/Temp/DataOutput";
 
-        // Process Folders/Files in preparation to api input
+        // Initialize Folder / File Processor in prep for api connection
         FitsFolderProcessor folderProcessor = new FitsFolderProcessor(inputFolderPath, outputFolderPath,
                 hotPixelThreshold, hotPixelMarkerSize);
         folderProcessor.processAllFiles();
