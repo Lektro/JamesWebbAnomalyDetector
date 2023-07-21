@@ -40,11 +40,13 @@ public class AnomalyDetectionMain {
                         outputFolder, hotPixelThreshold, hotPixelMarkerSize);
                 processor.processAndSaveImages();
 
+                // keep processing files until there are no new files to process
                 if (fileIndex < files.length - 1) {
                     System.out.println("Processing next file...");
                 } else {
                     System.out.println("All files processed.");
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

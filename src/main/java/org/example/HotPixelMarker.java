@@ -10,6 +10,7 @@ import static org.example.HotPixelDetector.*;
 public class HotPixelMarker {
 
     public static void markHotPixelsAndSave(FitsImage fitsImage, int markerSize, String outputFilePath) {
+
         double[][] data = fitsImage.getData();
         int imageWidth = fitsImage.getWidth();
         int imageHeight = fitsImage.getHeight();

@@ -137,9 +137,12 @@ public class AnomalyDetectionProcessor {
             // If no hot pixels are detected, save the original image as JPEG only
             System.out.println("No hot pixels detected in the image.");
 
+            // Extract the file name and remove the file extension to create a new output folder
             String fileName = new File(fitsFilePath).getName();
             String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
             String fileOutputFolder = outputFolder + "/" + fileNameWithoutExtension;
+
+            // Create a file object for the output folder
             File fileOutputDir = new File(fileOutputFolder);
 
             // Create a folder for each file in the output directory if it doesn't exist
@@ -147,7 +150,7 @@ public class AnomalyDetectionProcessor {
                 fileOutputDir.mkdir();
             }
 
-            // Save the original image as JPEG
+            // Save the original image as JPEG in the output folder
             String originalImageFilePath = fileOutputFolder + "/original_" + fileNameWithoutExtension + ".jpg";
             saveFitsImageAsJpeg(data, imageWidth, imageHeight, originalImageFilePath);
             System.out.println("Images for file '" + fileName + "' processed and saved.");
