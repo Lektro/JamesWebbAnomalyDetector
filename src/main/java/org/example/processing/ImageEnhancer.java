@@ -1,10 +1,10 @@
-package org.example;
+package org.example.processing;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.HotPixelDetector.getMaxPixelValue;
-import static org.example.HotPixelDetector.getMinPixelValue;
+import static org.example.processing.HotPixelDetector.getMaxPixelValue;
+import static org.example.processing.HotPixelDetector.getMinPixelValue;
 
 public class ImageEnhancer {
 

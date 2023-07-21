@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.processing.AnomalyDetectionProcessor;
+
 import java.io.File;
 
 public class AnomalyDetectionMain {

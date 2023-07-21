@@ -1,9 +1,11 @@
-package org.example;
+package org.example.processing;
 
 import nom.tam.fits.BasicHDU;
 import nom.tam.fits.Fits;
 import nom.tam.fits.FitsException;
 import nom.tam.fits.ImageHDU;
+import org.example.models.FitsImage;
+import org.example.models.HotPixel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,9 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.HotPixelDetector.getMaxPixelValue;
-import static org.example.HotPixelDetector.getMinPixelValue;
-//import static org.example.HotPixelMarker.scalePixelValueToRGB;
+import static org.example.processing.HotPixelDetector.getMaxPixelValue;
+import static org.example.processing.HotPixelDetector.getMinPixelValue;
 
 public class AnomalyDetectionProcessor {
 

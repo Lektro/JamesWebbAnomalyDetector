@@ -1,11 +1,14 @@
-package org.example;
+package org.example.processing;
+
+import org.example.models.FitsImage;
+import org.example.models.HotPixel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
-import static org.example.HotPixelDetector.*;
+import static org.example.processing.HotPixelDetector.*;
 
 public class HotPixelMarker {
 
