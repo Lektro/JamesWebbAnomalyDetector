@@ -30,7 +30,7 @@ public class HotPixelDetector {
     }
 
     static double getPixelValue(double[][] data, int x, int y) {
-        if (y >= 0 && y < data.length && x >= 0 && x < data[y].length) {
+        if (data != null && y >= 0 && y < data.length && x >= 0 && x < data[y].length) {
             return data[y][x];
         }
         // Default value for out-of-bounds cases

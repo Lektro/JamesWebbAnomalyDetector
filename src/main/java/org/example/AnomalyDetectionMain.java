@@ -11,6 +11,13 @@ public class AnomalyDetectionMain {
         int hotPixelMarkerSize = 15;
 
         File folder = new File(folderPath);
+        File outputDir = new File(outputFolder);
+
+        // Create a folder to store the output images if it doesn't exist
+        if (!outputDir.exists()) {
+            outputDir.mkdir();
+        }
+
         File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".fits"));
 
         if (files == null || files.length == 0) {
